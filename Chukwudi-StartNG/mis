@@ -1,0 +1,36 @@
+  print(d.values())
+                if userName in d.values():
+                    if passWord in d.values:
+                        print()
+                    print("Okay")
+                #print(d.get("username"))
+                #print(d.get("password"))
+                for item in d.items():
+                    #print(type(item))
+                    #print(item[1])
+
+
+
+
+                if userName == d.get("username") & passWord == d.get("password"):
+                    message = "Login Successful"
+                    print("Login Successful")
+                    isSuccessful = True
+                else:
+                    print("Your account details could not be found")
+                    message = "Your account details could not be found"
+
+                                       if userName in mis:
+                        print(mis)
+                    if passWord in mis:
+                        print(mis)
+
+
+                for key,value in d.items():
+                    if key == 'username':
+                        if userName == value:
+                            print("Found user name")
+                    if key == 'password':
+                        if passWord == value:
+                            print("Found Password")
+                    #print(key, d[key])

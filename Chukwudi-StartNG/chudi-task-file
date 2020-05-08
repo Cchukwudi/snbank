@@ -1,0 +1,109 @@
+# Start NG File.
+import random
+import json
+
+
+def generateAccountNumber():
+    list1 = []
+    for i in range(0, 10):
+        n = random.randint(1, 9)
+        n = str(n)
+        list1.append(n)
+    acc_number = ''.join(list1)
+
+    return acc_number
+
+
+def verifyLoginDetails(userName, passWord):
+    message = ""
+    isSuccessful = False
+    foundPassword = False
+    foundUserName = False
+
+    with open("staff", "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            try:
+                dict1 = json.loads(line)
+                for key,value in dict1.items():
+                    if key == 'username':
+                        if userName == value:
+                            foundUserName = True
+                    if key == 'password':
+                        if passWord == value:
+                            foundPassword = True
+            except:
+                pass
+
+            if foundPassword & foundUserName:
+                message = "You have successfully logged in"
+                isSuccessful = True
+            else:
+                message = "Your login details do not work."
+
+    return message, isSuccessful
+
+
+def createBankAccount():
+    data_dict = {}
+    account_name = input("Please the customer account name: ")
+    opening_balance = input("What is the opening Balance?")
+    account_type = input("Please enter the account type")
+    account_email = input("Please enter customer email")
+    account_number = generateAccountNumber()
+
+    # put all these values in a dictionary and write that dictionary
+    data_dict['account_name'] = account_name
+    data_dict['account_number'] = account_number
+    data_dict['account_type'] = account_type
+    data_dict['account_email'] = account_email
+    data_dict['opening_balance'] = opening_balance
+
+    json_file = json.dumps(data_dict)
+
+    with open("customer", "a") as file:
+        file.write(json_file + "," + '\n')
+
+    return "The customer account number is", account_number
+
+
+def fetchAccountDetails(acc_number):
+    details = {}
+    with open("customer", "r") as file:
+        data = file.readlines()
+        for f in data:
+            try:
+                d = json.loads(f)
+                for account_name, account_number in d.items():
+                    if acc_number == account_number:
+                        details = d
+            except:
+                pass
+
+    return details
+
+
+if __name__ == '__main__':
+    print("1. Staff Login \n2. Close App")
+    choice = int(input("Choose One of the Above options"))
+
+    if choice == 1:
+        username = input("Please enter your username")
+        password = input("Please enter your password")
+        (message, loginSuccessful) = verifyLoginDetails(username, password)
+        if loginSuccessful:
+            print("1. Create new bank account \n2. Check Account Details \n3.Logout")
+            option = int(input("Choose One of the Above options"))
+            if option == 1:
+                print(createBankAccount())
+            elif option == 2:
+                account_number = int(input("Please enter the account number of the customer"))
+                print(fetchAccountDetails(account_number))
+            elif option == 3:
+                print("logout")
+            else:
+                print("Invalid option")
+    elif choice == 2:
+        print("Close App")
+    else:
+        print("You have chosen an invalid option")
